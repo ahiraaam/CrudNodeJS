@@ -5,11 +5,22 @@ exports.count = async () => {
   return totalCount;
 };
 
-exports.all = (page, items_per_page) => {
+exports.all = (page, items_per_page, order, campo) => {
   if (page < 1) page = 1;
-  var offset = (page - 1) * items_per_page;
+  let offset = (page - 1) * items_per_page;
+  order = order || "ASC";
+  campo = campo || "id";
 
-  return knex.select("*").from("products").offset(offset).limit(items_per_page);
+  return knex
+    .select("*")
+    .from("products")
+    .orderBy(campo, order)
+    .offset(offset)
+    .limit(items_per_page);
+};
+
+exports.orderProducts = (order, campo) => {
+  return knex("*").from("products").orderBy(campo, order);
 };
 
 exports.findProduct = (id) => {
